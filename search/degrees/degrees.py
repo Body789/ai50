@@ -93,6 +93,41 @@ def shortest_path(source, target):
     """
 
     # TODO
+    # Initialize frontier to just the starting position
+    neighbors = list(neighbors_for_person(source))
+    frontier = QueueFrontier()
+    for i in range(0,len(neighbors)):
+        node = Node(state = neighbors[i], parent=None, action=None)
+        frontier.add(node)
+
+    # Initialize an empty explored set
+    explored = set()
+
+    # Keep looping until solution found
+    while True:
+        # Check if no connection
+        if frontier.empty():
+            return None
+        
+        # Choose node
+        node = frontier.remove()
+
+        # Check if it is the target
+        if node.state[1] == target:
+            result = []
+            while node.parent is not None:
+                result.insert(0,node.parent)
+            return result
+            
+        
+        # Add to explored
+        explored.add(node.state)
+
+        # Add neighbours to frontier
+        for pair in neighbors_for_person(node.state[1]):
+            if not frontier.contains_state(pair) and pair not in explored:
+                child = Node(state=pair, parent=node.state, action=None)
+                frontier.add(child)
     raise NotImplementedError
 
 

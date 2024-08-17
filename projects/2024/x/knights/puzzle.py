@@ -9,9 +9,24 @@ BKnave = Symbol("B is a Knave")
 CKnight = Symbol("C is a Knight")
 CKnave = Symbol("C is a Knave")
 
+
+# tha general knowledge of the game
+base = And(
+    Or(AKnight, AKnave),
+    Not(And(AKnave, AKnight)),
+    Or(BKnight, BKnave),
+    Not(And(BKnave, BKnight)),
+    Or(CKnight, CKnave),
+    Not(And(CKnave, CKnight))
+)
 # Puzzle 0
 # A says "I am both a knight and a knave."
 knowledge0 = And(
+    base,
+    # If A is a knight his sentence is true:
+    Implication(AKnight, And(AKnight, AKnave)),
+    # If A is a knave his sentence is false:
+    Implication(AKnave, Not(And(AKnight, AKnave)))
     # TODO
 )
 
@@ -19,6 +34,9 @@ knowledge0 = And(
 # A says "We are both knaves."
 # B says nothing.
 knowledge1 = And(
+    base,
+    Implication(AKnight, And(AKnave, BKnave)),
+    Implication(AKnave, Not(And(AKnave, BKnave)))
     # TODO
 )
 
@@ -26,6 +44,11 @@ knowledge1 = And(
 # A says "We are the same kind."
 # B says "We are of different kinds."
 knowledge2 = And(
+    base,
+    Implication(AKnight, Or(And(AKnight, BKnight), And(AKnave, BKnave))),
+    Implication(AKnave, Not(Or(And(AKnight, BKnight), And(AKnave, BKnave)))),
+    Implication(BKnave, Or(And(AKnight, BKnight), And(AKnave, BKnave))),
+    Implication(BKnight, Not(Or(And(AKnight, BKnight), And(AKnave, BKnave))))
     # TODO
 )
 
@@ -35,6 +58,15 @@ knowledge2 = And(
 # B says "C is a knave."
 # C says "A is a knight."
 knowledge3 = And(
+    base,
+    Implication(AKnight, Or(AKnight, AKnave)),
+    Implication(AKnave, Not(Or(AKnight, AKnave))),
+    Implication(BKnight, Implication(BKnight, AKnave)),
+    Implication(BKnave, Implication(BKnave, AKnight)),
+    Implication(BKnight, CKnave),
+    Implication(BKnave, CKnight),
+    Implication(CKnight, AKnight),
+    Implication(CKnave, AKnave)
     # TODO
 )
 
